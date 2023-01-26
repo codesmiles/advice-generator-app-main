@@ -42,29 +42,35 @@ export default {
   },
   setup() {
     const adviceDetails = reactive({
-      titleNumber: 404,
-      description:
-        "Your network no dey connected boss abi na Glo you de use?",
+      titleNumber: null,
+      description: null,
+      // titleNumber: 502,
+      // description: "Your network no dey connected boss abi na Glo you de use?",
     });
-
     // capture window screen size
     const windowWidth = ref(window.innerWidth);
     const isLoading = ref(false);
     const dividerImg = ref("");
-
+    
     const fetchData = async () => {
       isLoading.value = true;
       try {
-        let res = await axios.get("https://api.adviceslip.com/advice",{timeout: 1000});
-        // const getTime = new Date().getTime();
+        let res = await axios.get("https://api.adviceslip.com/advice", {
+          timeout: 5000,
+        });
         adviceDetails.titleNumber = res.data.slip.id;
         adviceDetails.description = res.data.slip.advice;
-
       } catch (err) {
-        if (err.code === 'ECONNABORTED') {
-         adviceDetails.titleNumber = 404;
-        adviceDetails.description = "You dey look for advice when you still dey use the network of the trenches";
- 
+        if (err.code === "ECONNABORTED") {
+          //you can use this to your advantage
+          adviceDetails.titleNumber = 408;
+          adviceDetails.description =
+            "You dey look for advice when you still dey use the network of the trenches LOL";
+        }
+        if (err.code === "ERR_NETWORK") {
+          adviceDetails.titleNumber = 502;
+          adviceDetails.description =
+            "Your network no dey connected boss abi na Glo you dey use?";
         }
         console.log(err);
       }
@@ -77,6 +83,7 @@ export default {
       } else {
         dividerImg.value = dividerMobile;
       }
+
       fetchData();
     });
 
