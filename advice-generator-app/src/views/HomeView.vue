@@ -8,12 +8,13 @@
       <div class="mt-5 mb-16">
         <img :src="dividerImg" alt="divider" class="mx-auto"/>
       </div>
-      <div @click="handleClick" class="bg-[#52ffa8] absolute p-4 rounded-full left-1/2 transform -translate-x-1/2 -translate-y-1/2 cursor-pointer hover:bg-[#cee3e9] hover:rotate-180 transition duration-500 ease-in-out hover:scale-110">
-        <img src="../assets/images/icon-dice.svg" alt="dice">
+      <div @click="handleClick" class="bg-[#52ffa8] absolute p-4 rounded-full left-1/2 transform -translate-x-1/2 -translate-y-1/2 cursor-pointer hover:bg-[#cee3e9] hover:rotate-180 transition duration-500 ease-in-out hover:scale-110 ">
+        <img src="../assets/images/icon-dice.svg"  alt="dice">
       </div>
     </div>
     <!-- loader -->
     <div>
+      
       <!-- <Loader/> -->
     </div>
 <!--  -->
@@ -42,7 +43,7 @@ export default {
       } else {
         dividerImg.value = dividerMobile;
       }
-      
+
       // fetch("https://api.adviceslip.com/advice")
       //   .then(res => res.json())
       //   .then(val => {
