@@ -44,8 +44,6 @@ export default {
     const adviceDetails = reactive({
       titleNumber: null,
       description: null,
-      // titleNumber: 502,
-      // description: "Your network no dey connected boss abi na Glo you de use?",
     });
     // capture window screen size
     const windowWidth = ref(window.innerWidth);
@@ -77,6 +75,7 @@ export default {
       isLoading.value = false;
     };
 
+    // capture window screen size
     onMounted(() => {
       if (windowWidth.value > 768) {
         dividerImg.value = dividerDesktop;
