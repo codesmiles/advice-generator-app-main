@@ -5,7 +5,7 @@
     <div class="bg-[#323A49] rounded-lg w-11/12 relative max-w-lg">
       <!-- loader -->
       <div v-show="isLoading" class="my-10 flex justify-center">
-        <Loader/>
+        <Loader />
       </div>
       <!--  -->
       <div v-show="!isLoading">
@@ -35,23 +35,41 @@ import { ref, onMounted, reactive } from "vue";
 import dividerMobile from "../assets/images/pattern-divider-mobile.svg";
 import dividerDesktop from "../assets/images/pattern-divider-desktop.svg";
 import Loader from "../components/Loader.vue";
+import axios from "axios";
 export default {
   components: {
     Loader,
   },
   setup() {
     const adviceDetails = reactive({
-      titleNumber: ref(117),
-      description: ref(
-        "It is easy to sit up and take notice, What is difficult is getting up and taking action."
-      ),
+      titleNumber: 404,
+      description:
+        "Your network no dey connected boss abi na Glo you de use?",
     });
 
     // capture window screen size
     const windowWidth = ref(window.innerWidth);
-
-    const isLoading = false;
+    const isLoading = ref(false);
     const dividerImg = ref("");
+
+    const fetchData = async () => {
+      isLoading.value = true;
+      try {
+        let res = await axios.get("https://api.adviceslip.com/advice",{timeout: 1000});
+        // const getTime = new Date().getTime();
+        adviceDetails.titleNumber = res.data.slip.id;
+        adviceDetails.description = res.data.slip.advice;
+
+      } catch (err) {
+        if (err.code === 'ECONNABORTED') {
+         adviceDetails.titleNumber = 404;
+        adviceDetails.description = "You dey look for advice when you still dey use the network of the trenches";
+ 
+        }
+        console.log(err);
+      }
+      isLoading.value = false;
+    };
 
     onMounted(() => {
       if (windowWidth.value > 768) {
@@ -59,27 +77,11 @@ export default {
       } else {
         dividerImg.value = dividerMobile;
       }
-
-      // fetch("https://api.adviceslip.com/advice")
-      //   .then(res => res.json())
-      //   .then(val => {
-      //   return (
-      //       (adviceTitle.value = val.id), (adviceDescription.value = val.advice)
-      //     );
-      //   })
+      fetchData();
     });
 
-    const handleClick = async () => {
-      // await fetch("https://api.adviceslip.com/advice")
-      //   .then((res) => res.json())
-      //   .then((val) => {
-      //     return (
-      //       (adviceTitle.value = val.id), (adviceDescription.value = val.advice)
-      //     );
-      //   });
-      adviceTitle.value = 201;
-      adviceDescription.value = "clicked";
-      console.log("clicked");
+    const handleClick = () => {
+      fetchData();
     };
 
     return {
