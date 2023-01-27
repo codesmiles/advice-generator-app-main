@@ -2,7 +2,7 @@
   <main
     class="bg-[#1f2632] h-screen flex justify-center items-center text-lg font-manrope"
   >
-    <div class="bg-[#323A49] rounded-lg w-11/12 relative max-w-lg">
+    <div class="bg-[#323A49] rounded-lg w-11/12 relative max-w-lg" ref="card" @click="go">
       <!-- loader -->
       <div v-show="isLoading" class="my-10 flex justify-center">
         <Loader />
@@ -14,7 +14,7 @@
         >
           advice #{{ adviceDetails.titleNumber }}
         </h1>
-        <p class="text-[#cee3e9] text-center tracking-wide font-black sm:px-10">
+        <p class="text-[#cee3e9] text-center tracking-wide font-black px-10">
           {{ adviceDetails.description }}
         </p>
       </div>
@@ -36,6 +36,7 @@ import dividerMobile from "../assets/images/pattern-divider-mobile.svg";
 import dividerDesktop from "../assets/images/pattern-divider-desktop.svg";
 import Loader from "../components/Loader.vue";
 import axios from "axios";
+import anime from "animejs";
 export default {
   components: {
     Loader,
@@ -77,7 +78,7 @@ export default {
 
     // capture window screen size
     onMounted(() => {
-      if (windowWidth.value > 768) {
+      if (windowWidth.value >= 768) {
         dividerImg.value = dividerDesktop;
       } else {
         dividerImg.value = dividerMobile;
@@ -90,12 +91,22 @@ export default {
       fetchData();
     };
 
+    const card = ref(null)
+     function go() {
+      anime({                                      // <-- using imported
+        targets: this.$refs.square,
+        translateX: 500
+      });
+    }
+
     return {
       adviceDetails,
       isLoading,
       dividerImg,
       windowWidth,
       handleClick,
+      go,
+      card
     };
   },
 };
