@@ -2,22 +2,25 @@
   <main
     class="bg-[#1f2632] h-screen flex justify-center items-center text-lg font-manrope"
   >
-    <div class="bg-[#323A49] rounded-lg w-11/12 relative max-w-lg card" >
+    <div class="bg-[#323A49] rounded-lg w-11/12 relative max-w-lg card">
       <!-- loader -->
       <div v-show="isLoading" class="my-10 flex justify-center">
         <Loader />
       </div>
       <!--  -->
+
       <div v-show="!isLoading">
         <h1
           className="text-[#52ffa8] text-center py-5 uppercase text-sm tracking-widest"
         >
           advice #{{ adviceDetails.titleNumber }}
-          <ContentVue :titleNumber="adviceDetails.titleNumber"/>
         </h1>
+
+          <transition name="fade">
         <p class="text-[#cee3e9] text-center tracking-wide font-black px-10">
           {{ adviceDetails.description }}
         </p>
+        </transition>
       </div>
       <div class="mt-5 mb-16">
         <img :src="dividerImg" alt="divider" class="mx-auto" />
@@ -38,15 +41,12 @@ import dividerDesktop from "../assets/images/pattern-divider-desktop.svg";
 import Loader from "../components/Loader.vue";
 import axios from "axios";
 import anime from "animejs";
-import ContentVue from "../components/content.vue";
+
 export default {
   components: {
     Loader,
-    ContentVue
   },
   setup() {
-
-    
     const adviceDetails = reactive({
       titleNumber: null,
       description: null,
@@ -55,13 +55,15 @@ export default {
     const windowWidth = ref(window.innerWidth);
     const isLoading = ref(false);
     const dividerImg = ref("");
-    
-    const fetchData = async () => {
+
+    // fetching data from api
+    const fetchData = async (data, err) => {
       isLoading.value = true;
       try {
         let res = await axios.get("https://api.adviceslip.com/advice", {
           timeout: 5000,
         });
+
         adviceDetails.titleNumber = res.data.slip.id;
         adviceDetails.description = res.data.slip.advice;
       } catch (err) {
@@ -76,6 +78,8 @@ export default {
           adviceDetails.description =
             "Your network no dey connected boss abi na Glo you dey use?";
         }
+
+        // RETURN OTHER ERRORS
         console.log(err);
       }
       isLoading.value = false;
@@ -89,7 +93,7 @@ export default {
         dividerImg.value = dividerMobile;
       }
 
-      fetchData();
+      console.log(fetchData());
       animatesircles();
     });
 
@@ -97,16 +101,14 @@ export default {
       fetchData();
     };
 
-    const card = ref(null);
-
-      function animatesircles() {
+    function animatesircles() {
       anime({
         targets: ".card",
         translateY: 20,
-        direction: 'alternate',
+        direction: "alternate",
         loop: true,
-        easing: 'linear'
-      }); 
+        easing: "linear",
+      });
     }
 
     return {
@@ -115,8 +117,8 @@ export default {
       dividerImg,
       windowWidth,
       handleClick,
-      card
     };
   },
 };
 </script>
+
