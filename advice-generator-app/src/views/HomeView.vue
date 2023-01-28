@@ -104,7 +104,7 @@ export default {
     function animatesircles() {
       anime({
         targets: ".card",
-        translateY: 20,
+        translateY: 30,
         direction: "alternate",
         loop: true,
         easing: "linear",
